@@ -9,6 +9,7 @@ require github.com/joho/godotenv v1.5.1
 require (
 	github.com/alecthomas/chroma/v2 v2.18.0
 	github.com/go-chi/chi/v5 v5.2.3
+	github.com/go-chi/cors v1.2.2
 	github.com/go-chi/httprate v0.15.0
 	github.com/kyokomi/emoji/v2 v2.2.13
 	github.com/prometheus/client_golang v1.22.0

@@ -11,6 +11,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/go-chi/cors"
 	"github.com/go-chi/httprate"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
@@ -96,7 +97,11 @@ func main() {
 		r.Get("/api/issues/{key}/refresh", apiRefreshHandler(service))
 		r.Get("/api/user/{name}/comments", apiUserCommentsHandler(service))
 
-		r.Get("/api/v1/issues/{key}", apiV1Issue(service))
+		r.Group(func(r chi.Router) {
+			r.Use(cors.Handler(cors.Options{}))
+
+			r.Get("/api/v1/issues/{key}", apiV1Issue(service))
+		})
 	})
 
 	log.Println("Starting server...")
