@@ -27,6 +27,35 @@
   --panel-error: #FFECEB;
 }
 
+html[data-theme="dark"] {
+  --gray-50: #1a1d1e;
+  --gray-100: #23272b;
+  --gray-200: #2c3033;
+  --gray-300: #4a4f55;
+  --gray-400: #6b727a;
+  --gray-500: #8a9199;
+  --gray-600: #b3bac2;
+  --gray-700: #fcf3e7;
+  --gray-800: #d9dee3;
+  --gray-900: #eef1f4;
+  --gray-950: #ffffff;
+  --resolved: #008d5c;
+  --resolved-bg: #005c3e;
+  --resolved-text: #b7fff8;
+  --link: #7ab6ff;
+  --link-hover: #b7d8ff;
+  --link-bg: #1b3556;
+  --border: #ffffff1f;
+  --shadow: #00000066;
+  --backdrop: #000000d9;
+  --backdrop-bg: #00000080;
+  --panel-info: #232732;
+  --panel-note: #2d2748;
+  --panel-success: #17392f;
+  --panel-warning: #533b27;
+  --panel-error: #412728;
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   background-color: var(--gray-50);
@@ -106,6 +135,16 @@ header {
   border: 1px solid var(--gray-300);
   border-radius: 0.25rem;
   width: 100%;
+}
+
+.theme-select {
+  height: 2rem;
+  border: 1px solid var(--gray-300);
+  border-radius: 0.25rem;
+  background-color: var(--gray-50);
+  color: var(--gray-950);
+  padding: 0 0.5rem;
+  font-size: 14px;
 }
 
 .search-results {
@@ -474,6 +513,10 @@ tbody .issue-table-key {
 .issue-action.issue-resolved {
   color: var(--gray-50);
   background-color: var(--resolved);
+}
+
+html[data-theme="dark"] .issue-action.issue-resolved {
+  color: var(--gray-950);
 }
 
 .issue-menu-button {

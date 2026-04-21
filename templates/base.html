@@ -18,6 +18,11 @@
       <input type="text" name="search" placeholder="Search" autocomplete="off" hx-post="/api/search" hx-trigger="input delay:0.2s" hx-target="#search-results">
       <div id="search-results" class="search-results"></div>
     </div>
+    <select id="theme-select" class="theme-select" aria-label="Theme">
+      <option value="system">System</option>
+      <option value="light">Light</option>
+      <option value="dark">Dark</option>
+    </select>
   </header>
 
   <div class="content {{block "content-class" .}}{{end}}">

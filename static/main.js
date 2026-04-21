@@ -1,3 +1,50 @@
+function initTheme() {
+  const select = document.getElementById('theme-select')
+  const storageKey = 'theme'
+  const media = window.matchMedia('(prefers-color-scheme: dark)')
+
+  function systemTheme() {
+    return media.matches ? 'dark' : 'light'
+  }
+
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme)
+  }
+
+  const savedTheme = localStorage.getItem(storageKey)
+
+  if (savedTheme === 'light' || savedTheme === 'dark') {
+    applyTheme(savedTheme)
+    if (select) {
+      select.value = savedTheme
+    }
+  } else {
+    applyTheme(systemTheme())
+    if (select) {
+      select.value = 'system'
+    }
+  }
+
+  if (!select) return
+
+  select.addEventListener('change', () => {
+    const value = select.value
+    if (value === 'system') {
+      localStorage.removeItem(storageKey)
+      applyTheme(systemTheme())
+    } else {
+      localStorage.setItem(storageKey, value)
+      applyTheme(value)
+    }
+  })
+
+  media.addEventListener('change', () => {
+    if (!localStorage.getItem(storageKey)) {
+      applyTheme(systemTheme())
+    }
+  })
+}
+
 function afterSwap() {
   document.querySelectorAll('time[datetime]').forEach((el) => {
     const d = new Date(el.getAttribute('datetime'))
@@ -68,6 +115,7 @@ function expandCommentsIfNeeded() {
   }
 }
 
+initTheme()
 afterSwap()
 
 setTimeout(() => {
