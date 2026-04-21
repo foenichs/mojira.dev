@@ -510,6 +510,10 @@ tbody .issue-table-key {
   display: flex;
 }
 
+.issue-menu-button.open .issue-menu {
+  display: flex;
+}
+
 .issue-split {
   padding-top: 1rem;
   display: flex;

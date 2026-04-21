@@ -40,6 +40,13 @@ function afterSwap() {
     }
   })
 
+  document.querySelectorAll('.issue-menu-button').forEach((el) => {
+    el.onclick = (e) => {
+      e.stopPropagation()
+      el.classList.toggle('open')
+    }
+  })
+
   expandCommentsIfNeeded()
 }
 
@@ -80,6 +87,12 @@ document.body.addEventListener('htmx:afterSwap', () => {
 
 window.addEventListener('hashchange', () => {
   onHashChange()
+})
+
+document.addEventListener('click', () => {
+  document.querySelectorAll('.issue-menu-button.open').forEach((el) => {
+    el.classList.remove('open')
+  })
 })
 
 const overlay = document.getElementById('image-overlay')
