@@ -134,67 +134,91 @@
       {{if .Issue.CreatorName}}
         <p><label>Original Reporter:</label>
           {{if .Issue.CreatorAvatar}}
-            <img class="avatar" src="{{.Issue.CreatorAvatar}}" alt="" width="24" height="24">
+            <img class="avatar" src="{{.Issue.CreatorAvatar}}" alt="" width="24" height="24" style="display: inline-block; vertical-align: middle;">
           {{end}}
-          <a class="user-link" href="/user/{{urlPathEscape .Issue.CreatorName}}">
+          <a class="user-link" href="/user/{{urlPathEscape .Issue.CreatorName}}" style="display: inline-block; vertical-align: middle;">
             {{.Issue.CreatorName}}
           </a>
         </p>
       {{end}}
-      <p><label>Reporter:</label>
-        {{if .Issue.ReporterAvatar}}
-          <img class="avatar" src="{{.Issue.ReporterAvatar}}" alt="" width="24" height="24">
-        {{end}}
-        <a class="user-link" href="/user/{{urlPathEscape .Issue.ReporterName}}">
-          {{.Issue.ReporterName}}
-        </a>
-      </p>
-      <p><label>Assignee:</label>
-        {{if .Issue.AssigneeName}}
-          {{if .Issue.AssigneeAvatar}}
-            <img class="avatar" src="{{.Issue.AssigneeAvatar}}" alt="" width="24" height="24">
+      {{if .Issue.ReporterName}}
+        <p><label>Reporter:</label>
+          {{if .Issue.ReporterAvatar}}
+            <img class="avatar" src="{{.Issue.ReporterAvatar}}" alt="" width="24" height="24" style="display: inline-block; vertical-align: middle;">
           {{end}}
-          <a class="user-link" href="/user/{{urlPathEscape .Issue.AssigneeName}}">
+          <a class="user-link" href="/user/{{urlPathEscape .Issue.ReporterName}}" style="display: inline-block; vertical-align: middle;">
+            {{.Issue.ReporterName}}
+          </a>
+        </p>
+      {{end}}
+      {{if and .Issue.AssigneeName (ne .Issue.AssigneeName "Unassigned")}}
+        <p><label>Assignee:</label>
+          {{if .Issue.AssigneeAvatar}}
+            <img class="avatar" src="{{.Issue.AssigneeAvatar}}" alt="" width="24" height="24" style="display: inline-block; vertical-align: middle;">
+          {{end}}
+          <a class="user-link" href="/user/{{urlPathEscape .Issue.AssigneeName}}" style="display: inline-block; vertical-align: middle;">
             {{.Issue.AssigneeName}}
           </a>
-        {{else}}
-          (Unassigned)
-        {{end}}
-      </p>
-      <p><label>Created:</label> <time datetime="{{formatTime .Issue.CreatedDate}}">{{formatTime .Issue.CreatedDate}}</time></p>
-      <p><label>Updated:</label> <time datetime="{{formatTime .Issue.UpdatedDate}}">{{formatTime .Issue.UpdatedDate}}</time></p>
+        </p>
+      {{end}}
+      {{if .Issue.CreatedDate}}
+        <p><label>Created:</label> <time datetime="{{formatTime .Issue.CreatedDate}}">{{formatTime .Issue.CreatedDate}}</time></p>
+      {{end}}
+      {{if .Issue.UpdatedDate}}
+        <p><label>Updated:</label> <time datetime="{{formatTime .Issue.UpdatedDate}}">{{formatTime .Issue.UpdatedDate}}</time></p>
+      {{end}}
       {{if .Issue.ResolvedDate}}
-      <p><label>Resolved:</label> <time datetime="{{formatTime .Issue.ResolvedDate}}">{{formatTime .Issue.ResolvedDate}}</time></p>
+        <p><label>Resolved:</label> <time datetime="{{formatTime .Issue.ResolvedDate}}">{{formatTime .Issue.ResolvedDate}}</time></p>
       {{end}}
-      {{if .Issue.IsProject "MC" "MCPE"}}
-      <p><label>ADO:</label> <span data-copy="{{.Issue.ADO}}">{{.Issue.ADO}} {{icon "check"}}</span></p>
+      {{if and (.Issue.IsProject "MC" "MCPE") .Issue.ADO}}
+        <p><label>ADO:</label> <span data-copy="{{.Issue.ADO}}">{{.Issue.ADO}} {{icon "check"}}</span></p>
       {{end}}
-      <p><label>Confirmation Status:</label> {{.Issue.ConfirmationStatus}}</p>
+      {{if .Issue.ConfirmationStatus}}
+        <p><label>Confirmation Status:</label> {{.Issue.ConfirmationStatus}}</p>
+      {{end}}
       {{if .Issue.IsProject "MCPE"}}
-      <p><label>Platform:</label> {{.Issue.Platform}}</p>
-      <p><label>OS Version:</label> {{.Issue.OSVersion}}</p>
+        {{if .Issue.Platform}}
+          <p><label>Platform:</label> {{.Issue.Platform}}</p>
+        {{end}}
+        {{if .Issue.OSVersion}}
+          <p><label>OS Version:</label> {{.Issue.OSVersion}}</p>
+        {{end}}
       {{end}}
       {{if .Issue.IsProject "REALMS"}}
-      <p><label>Realms Platform:</label> {{.Issue.RealmsPlatform}}</p>
+        {{if .Issue.RealmsPlatform}}
+          <p><label>Realms Platform:</label> {{.Issue.RealmsPlatform}}</p>
+        {{end}}
       {{end}}
       {{if .Issue.IsProject "MC"}}
-      <p><label>Area:</label> {{.Issue.Area}}</p>
+        {{if .Issue.Area}}
+          <p><label>Area:</label> {{.Issue.Area}}</p>
+        {{end}}
       {{end}}
       {{if .Issue.IsProject "WEB"}}
-      <p><label>Components:</label> {{join .Issue.Components}}</p>
+        {{if and .Issue.Components (ne (join .Issue.Components) "Unassigned")}}
+          <p><label>Components:</label> {{join .Issue.Components}}</p>
+        {{end}}
       {{end}}
       {{if .Issue.IsProject "MC"}}
-      <p><label>Mojang Priority:</label> {{.Issue.MojangPriority}}</p>
-      <p><label>Category:</label> {{join .Issue.Category}}</p>
-      {{end}}
-      <p><label>Labels:</label> {{join .Issue.Labels}}</p>
-      {{if .Issue.IsProject "MC" "MCPE"}}
-      <p><label>Affects Versions:</label>
-        {{with .Issue.VisibleAffectedVersions}}
-        {{join .Top}}{{if .Middle}}, <button class="expand-inline-button" data-expand="hidden-versions-{{$.Issue.Key}}">{{len .Middle}} more</button><span style="display:none;" id="hidden-versions-{{$.Issue.Key}}">{{join .Middle}}</span>{{end}}{{if .Bottom}}, {{join .Bottom}}{{end}}
+        {{if .Issue.MojangPriority}}
+          <p><label>Mojang Priority:</label> {{.Issue.MojangPriority}}</p>
         {{end}}
-      </p>
-      <p><label>Fix Versions:</label> {{join .Issue.FixVersions}}</p>
+        {{if and .Issue.Category (ne (join .Issue.Category) "(Unassigned)")}}
+          <p><label>Category:</label> {{join .Issue.Category}}</p>
+        {{end}}
+      {{end}}
+      {{if .Issue.Labels}}
+        <p><label>Labels:</label> {{join .Issue.Labels}}</p>
+      {{end}}
+      {{if .Issue.IsProject "MC" "MCPE"}}
+        <p><label>Affects Versions:</label>
+          {{with .Issue.VisibleAffectedVersions}}
+            {{join .Top}}{{if .Middle}}, <button class="expand-inline-button" data-expand="hidden-versions-{{$.Issue.Key}}">{{len .Middle}} more</button><span style="display:none;" id="hidden-versions-{{$.Issue.Key}}">{{join .Middle}}</span>{{end}}{{if .Bottom}}, {{join .Bottom}}{{end}}
+          {{end}}
+        </p>
+        {{if .Issue.FixVersions}}
+          <p><label>Fix Versions:</label> {{join .Issue.FixVersions}}</p>
+        {{end}}
       {{end}}
       <p class="sync-note" id="sync-note" {{if and (not .Issue.IsUpToDate) (not .IsRefresh)}}hx-get="/api/issues/{{.Issue.Key}}/refresh" hx-trigger="load delay:1s" hx-swap="none"{{end}}>
         {{if .Issue.IsUpToDate}}{{icon "check"}}{{else}}{{icon "sync"}}{{end}}
