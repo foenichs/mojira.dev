@@ -130,7 +130,14 @@
       {{end}}
     </main>
 
-    <div class="issue-details" id="issue-details" data-collapsed="true">
+    <div class="issue-details" id="issue-details">
+      <script>
+        (function() {
+          const isCollapsed = localStorage.getItem('issue-details-collapsed') !== 'false';
+          document.getElementById('issue-details').setAttribute('data-collapsed', isCollapsed);
+        })();
+      </script>
+
       <button type="button" id="toggle-empty-fields" class="issue-details-toggle">
         <span class="toggle-icon">{{icon "chevron-right"}}</span>
         <span id="toggle-empty-fields-text" class="toggle-label">Collapsed</span>
@@ -218,18 +225,37 @@
 </div>
 
 <script>
-  document.addEventListener('click', function(event) {
-    const button = event.target.closest('#toggle-empty-fields');
-    if (!button) return;
+  (function() {
+    const syncButtonText = () => {
+      const details = document.getElementById('issue-details');
+      const text = document.getElementById('toggle-empty-fields-text');
+      if (details && text) {
+        const isCollapsed = details.getAttribute('data-collapsed') === 'true';
+        text.textContent = isCollapsed ? 'Collapsed' : 'Expanded';
+      }
+    };
+    
+    syncButtonText();
 
-    const details = document.getElementById('issue-details');
-    const text = document.getElementById('toggle-empty-fields-text');
-    if (!details || !text) return;
+    if (!window.issueDetailsListenerSet) {
+      document.addEventListener('click', function(event) {
+        const button = event.target.closest('#toggle-empty-fields');
+        if (!button) return;
 
-    const isCollapsed = details.getAttribute('data-collapsed') === 'true';
-    details.setAttribute('data-collapsed', !isCollapsed);
-    text.textContent = isCollapsed ? 'Expanded' : 'Collapsed';
-  });
+        const details = document.getElementById('issue-details');
+        const text = document.getElementById('toggle-empty-fields-text');
+        if (!details || !text) return;
+        
+        const isCurrentlyCollapsed = details.getAttribute('data-collapsed') === 'true';
+        const newState = !isCurrentlyCollapsed;
+
+        details.setAttribute('data-collapsed', newState);
+        text.textContent = newState ? 'Collapsed' : 'Expanded';
+        localStorage.setItem('issue-details-collapsed', newState);
+      });
+      window.issueDetailsListenerSet = true;
+    }
+  })();
 </script>
 {{end}}
 
