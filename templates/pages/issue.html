@@ -130,95 +130,74 @@
       {{end}}
     </main>
 
-    <div class="issue-details">
-      {{if .Issue.CreatorName}}
-        <p><label>Original Reporter:</label>
+    <div class="issue-details" id="issue-details" data-collapsed="true">
+      <button type="button" id="toggle-empty-fields" class="issue-details-toggle">
+        <span class="toggle-icon">{{icon "chevron-right"}}</span>
+        <span id="toggle-empty-fields-text" class="toggle-label">Collapsed</span>
+      </button>
+
+      <p class="{{if not .Issue.CreatorName}}is-empty{{end}}"><label>Original Reporter:</label>
+        {{if .Issue.CreatorName}}
           {{if .Issue.CreatorAvatar}}
             <img class="avatar" src="{{.Issue.CreatorAvatar}}" alt="" width="24" height="24" style="display: inline-block; vertical-align: middle;">
           {{end}}
           <a class="user-link" href="/user/{{urlPathEscape .Issue.CreatorName}}" style="display: inline-block; vertical-align: middle;">
             {{.Issue.CreatorName}}
           </a>
-        </p>
-      {{end}}
-      {{if .Issue.ReporterName}}
-        <p><label>Reporter:</label>
+        {{end}}
+      </p>
+      <p class="{{if not .Issue.ReporterName}}is-empty{{end}}"><label>Reporter:</label>
+        {{if .Issue.ReporterName}}
           {{if .Issue.ReporterAvatar}}
             <img class="avatar" src="{{.Issue.ReporterAvatar}}" alt="" width="24" height="24" style="display: inline-block; vertical-align: middle;">
           {{end}}
           <a class="user-link" href="/user/{{urlPathEscape .Issue.ReporterName}}" style="display: inline-block; vertical-align: middle;">
             {{.Issue.ReporterName}}
           </a>
-        </p>
-      {{end}}
-      {{if and .Issue.AssigneeName (ne .Issue.AssigneeName "Unassigned")}}
-        <p><label>Assignee:</label>
+        {{end}}
+      </p>
+      <p class="{{if not (and .Issue.AssigneeName (ne .Issue.AssigneeName "Unassigned"))}}is-empty{{end}}"><label>Assignee:</label>
+        {{if and .Issue.AssigneeName (ne .Issue.AssigneeName "Unassigned")}}
           {{if .Issue.AssigneeAvatar}}
             <img class="avatar" src="{{.Issue.AssigneeAvatar}}" alt="" width="24" height="24" style="display: inline-block; vertical-align: middle;">
           {{end}}
           <a class="user-link" href="/user/{{urlPathEscape .Issue.AssigneeName}}" style="display: inline-block; vertical-align: middle;">
             {{.Issue.AssigneeName}}
           </a>
-        </p>
+        {{end}}
+      </p>
+      <p class="{{if not .Issue.CreatedDate}}is-empty{{end}}"><label>Created:</label> {{if .Issue.CreatedDate}}<time datetime="{{formatTime .Issue.CreatedDate}}">{{formatTime .Issue.CreatedDate}}</time>{{end}}</p>
+      <p class="{{if not .Issue.UpdatedDate}}is-empty{{end}}"><label>Updated:</label> {{if .Issue.UpdatedDate}}<time datetime="{{formatTime .Issue.UpdatedDate}}">{{formatTime .Issue.UpdatedDate}}</time>{{end}}</p>
+      <p class="{{if not .Issue.ResolvedDate}}is-empty{{end}}"><label>Resolved:</label> {{if .Issue.ResolvedDate}}<time datetime="{{formatTime .Issue.ResolvedDate}}">{{formatTime .Issue.ResolvedDate}}</time>{{end}}</p>
+      {{if and (.Issue.IsProject "MC" "MCPE")}}
+        <p class="{{if not .Issue.ADO}}is-empty{{end}}"><label>ADO:</label> {{if .Issue.ADO}}<span data-copy="{{.Issue.ADO}}">{{.Issue.ADO}} {{icon "check"}}</span>{{end}}</p>
       {{end}}
-      {{if .Issue.CreatedDate}}
-        <p><label>Created:</label> <time datetime="{{formatTime .Issue.CreatedDate}}">{{formatTime .Issue.CreatedDate}}</time></p>
-      {{end}}
-      {{if .Issue.UpdatedDate}}
-        <p><label>Updated:</label> <time datetime="{{formatTime .Issue.UpdatedDate}}">{{formatTime .Issue.UpdatedDate}}</time></p>
-      {{end}}
-      {{if .Issue.ResolvedDate}}
-        <p><label>Resolved:</label> <time datetime="{{formatTime .Issue.ResolvedDate}}">{{formatTime .Issue.ResolvedDate}}</time></p>
-      {{end}}
-      {{if and (.Issue.IsProject "MC" "MCPE") .Issue.ADO}}
-        <p><label>ADO:</label> <span data-copy="{{.Issue.ADO}}">{{.Issue.ADO}} {{icon "check"}}</span></p>
-      {{end}}
-      {{if .Issue.ConfirmationStatus}}
-        <p><label>Confirmation Status:</label> {{.Issue.ConfirmationStatus}}</p>
-      {{end}}
+      <p class="{{if not .Issue.ConfirmationStatus}}is-empty{{end}}"><label>Confirmation Status:</label> {{if .Issue.ConfirmationStatus}}{{.Issue.ConfirmationStatus}}{{end}}</p>
       {{if .Issue.IsProject "MCPE"}}
-        {{if .Issue.Platform}}
-          <p><label>Platform:</label> {{.Issue.Platform}}</p>
-        {{end}}
-        {{if .Issue.OSVersion}}
-          <p><label>OS Version:</label> {{.Issue.OSVersion}}</p>
-        {{end}}
+        <p class="{{if not .Issue.Platform}}is-empty{{end}}"><label>Platform:</label> {{if .Issue.Platform}}{{.Issue.Platform}}{{end}}</p>
+        <p class="{{if not .Issue.OSVersion}}is-empty{{end}}"><label>OS Version:</label> {{if .Issue.OSVersion}}{{.Issue.OSVersion}}{{end}}</p>
       {{end}}
       {{if .Issue.IsProject "REALMS"}}
-        {{if .Issue.RealmsPlatform}}
-          <p><label>Realms Platform:</label> {{.Issue.RealmsPlatform}}</p>
-        {{end}}
+        <p class="{{if not .Issue.RealmsPlatform}}is-empty{{end}}"><label>Realms Platform:</label> {{if .Issue.RealmsPlatform}}{{.Issue.RealmsPlatform}}{{end}}</p>
       {{end}}
       {{if .Issue.IsProject "MC"}}
-        {{if .Issue.Area}}
-          <p><label>Area:</label> {{.Issue.Area}}</p>
-        {{end}}
+        <p class="{{if not .Issue.Area}}is-empty{{end}}"><label>Area:</label> {{if .Issue.Area}}{{.Issue.Area}}{{end}}</p>
       {{end}}
       {{if .Issue.IsProject "WEB"}}
-        {{if and .Issue.Components (ne (join .Issue.Components) "Unassigned")}}
-          <p><label>Components:</label> {{join .Issue.Components}}</p>
-        {{end}}
+        <p class="{{if not (and .Issue.Components (ne (join .Issue.Components) "Unassigned"))}}is-empty{{end}}"><label>Components:</label> {{if and .Issue.Components (ne (join .Issue.Components) "Unassigned")}}{{join .Issue.Components}}{{end}}</p>
       {{end}}
       {{if .Issue.IsProject "MC"}}
-        {{if .Issue.MojangPriority}}
-          <p><label>Mojang Priority:</label> {{.Issue.MojangPriority}}</p>
-        {{end}}
-        {{if and .Issue.Category (ne (join .Issue.Category) "(Unassigned)")}}
-          <p><label>Category:</label> {{join .Issue.Category}}</p>
-        {{end}}
+        <p class="{{if not .Issue.MojangPriority}}is-empty{{end}}"><label>Mojang Priority:</label> {{if .Issue.MojangPriority}}{{.Issue.MojangPriority}}{{end}}</p>
+        <p class="{{if not (and .Issue.Category (ne (join .Issue.Category) "(Unassigned)"))}}is-empty{{end}}"><label>Category:</label> {{if and .Issue.Category (ne (join .Issue.Category) "(Unassigned)")}}{{join .Issue.Category}}{{end}}</p>
       {{end}}
-      {{if .Issue.Labels}}
-        <p><label>Labels:</label> {{join .Issue.Labels}}</p>
-      {{end}}
+      <p class="{{if not .Issue.Labels}}is-empty{{end}}"><label>Labels:</label> {{if .Issue.Labels}}{{join .Issue.Labels}}{{end}}</p>
       {{if .Issue.IsProject "MC" "MCPE"}}
         <p><label>Affects Versions:</label>
           {{with .Issue.VisibleAffectedVersions}}
             {{join .Top}}{{if .Middle}}, <button class="expand-inline-button" data-expand="hidden-versions-{{$.Issue.Key}}">{{len .Middle}} more</button><span style="display:none;" id="hidden-versions-{{$.Issue.Key}}">{{join .Middle}}</span>{{end}}{{if .Bottom}}, {{join .Bottom}}{{end}}
           {{end}}
         </p>
-        {{if .Issue.FixVersions}}
-          <p><label>Fix Versions:</label> {{join .Issue.FixVersions}}</p>
-        {{end}}
+        <p class="{{if not .Issue.FixVersions}}is-empty{{end}}"><label>Fix Versions:</label> {{if .Issue.FixVersions}}{{join .Issue.FixVersions}}{{end}}</p>
       {{end}}
       <p class="sync-note" id="sync-note" {{if and (not .Issue.IsUpToDate) (not .IsRefresh)}}hx-get="/api/issues/{{.Issue.Key}}/refresh" hx-trigger="load delay:1s" hx-swap="none"{{end}}>
         {{if .Issue.IsUpToDate}}{{icon "check"}}{{else}}{{icon "sync"}}{{end}}
@@ -237,6 +216,21 @@
     <div class="image-overlay-info"></div>
   </div>
 </div>
+
+<script>
+  document.addEventListener('click', function(event) {
+    const button = event.target.closest('#toggle-empty-fields');
+    if (!button) return;
+
+    const details = document.getElementById('issue-details');
+    const text = document.getElementById('toggle-empty-fields-text');
+    if (!details || !text) return;
+
+    const isCollapsed = details.getAttribute('data-collapsed') === 'true';
+    details.setAttribute('data-collapsed', !isCollapsed);
+    text.textContent = isCollapsed ? 'Expanded' : 'Collapsed';
+  });
+</script>
 {{end}}
 
 {{define "issueLink"}}

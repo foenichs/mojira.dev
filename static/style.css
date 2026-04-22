@@ -528,6 +528,40 @@ tbody .issue-table-key {
   font-size: 14px;
 }
 
+.issue-details-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0;
+  margin: 0 0 0.5rem 0;
+  background: none;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+}
+
+.issue-details-toggle .toggle-icon {
+  display: inline-flex;
+  align-items: center;
+  transition: transform 0.15s ease;
+  flex: 0 0 auto;
+}
+
+.issue-details[data-collapsed="false"] .toggle-icon {
+  transform: rotate(90deg);
+}
+
+.issue-details-toggle .toggle-label {
+  font-weight: 600;
+}
+
+.issue-details[data-collapsed="true"] p.is-empty {
+  display: none;
+}
+
 .issue-details p {
   margin-bottom: 0.25rem;
   min-height: 1.5rem;
